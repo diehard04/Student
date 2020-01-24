@@ -9,7 +9,7 @@
     android:paddingTop="20dp"
     android:paddingRight="20dp"
     android:paddingBottom="20dp"
-    tools:context=".LoginActivity">
+    tools:context="LoginActivity">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
@@ -23,6 +23,15 @@
             android:layout_marginTop="40dp"
             android:src="@drawable/image001" />
 
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/textInputEditTextName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:hint="@string/hint_name"
+            android:inputType="text"
+            android:maxLines="1"
+            android:textColor="@android:color/white" />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/textInputEditTextEmail"
@@ -44,21 +53,31 @@
             android:maxLines="1"
             android:textColor="@android:color/white" />
 
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/textInputEditTextConfirmPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="@string/hint_confirm_password"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:textColor="@android:color/white" />
+
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/appCompatButtonLogin"
+            android:id="@+id/appCompatButtonRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
             android:background="@color/colorTextHint"
-            android:text="@string/text_login" />
+            android:text="@string/text_register" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/textViewLinkRegister"
+            android:id="@+id/appCompatTextViewLoginLink"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:gravity="center"
-            android:text="@string/text_not_member"
+            android:text="Already a member? Login"
             android:textSize="16dp" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.core.widget.NestedScrollView>
