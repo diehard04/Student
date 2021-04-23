@@ -2,8 +2,20 @@
 <resources>
     <color name="colorPrimary">#51d8c7</color>
     <color name="colorPrimaryDark">#51d8c7</color>
-    <color name="colorAccent">#FFFFFF</color>
-    <color name="colorBackground">#413e4f</color>
+    <color name="colorAccent">#51d8c7</color>
+    <color name="colorBackground">#FFFFFF</color>
     <color name="colorText">#FFFFFF</color>
     <color name="colorTextHint">#51d8c7</color>
+<!--    <color name="colorPrimary">#E45BF3</color>-->
+<!--    <color name="colorPrimaryDark">#CC00D3</color>-->
+<!--    <color name="colorAccent">#fff</color>-->
+    <color name="colorLight">#FFFFFF</color>
+    <color name="white">#FFF</color>
+    <color name="background">#ececec</color>
+    <color name="black">#000000</color>
+    <color name="light_grey">#cccccc</color>
+    <color name="grey_light">#E0E0E0</color>
+
+    <color name="cardColor">#ffffff</color>
+    <color name="textcardColor">#3f3f3f</color>
 </resources>

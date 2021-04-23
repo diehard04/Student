@@ -4,7 +4,7 @@
     android:id="@+id/nestedScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
+    android:background="@color/white"
     android:paddingLeft="20dp"
     android:paddingTop="20dp"
     android:paddingRight="20dp"
@@ -18,31 +18,54 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="100dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="40dp"
-            android:src="@drawable/image001" />
+            android:scaleType="fitXY"
+            android:src="@drawable/rv_college" />
 
+        <TextView
+            android:id="@+id/userType"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/textInputEditTextEmail"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:background="@drawable/edittextround"
             android:hint="@string/hint_email"
-            android:inputType="text"
-            android:maxLines="1"
-            android:textColor="@android:color/white" />
+            android:paddingTop="5dp">
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/textInputEditTextPassword"
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/textInputEditTextEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLines="1"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:background="@drawable/edittextround"
             android:hint="@string/hint_password"
-            android:inputType="textPassword"
-            android:maxLines="1"
-            android:textColor="@android:color/white" />
+            android:paddingTop="5dp">
+
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/textInputEditTextPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:maxLines="1"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/appCompatButtonLogin"
@@ -60,5 +83,37 @@
             android:gravity="center"
             android:text="@string/text_not_member"
             android:textSize="16dp" />
+
+        <RadioGroup
+            android:id="@+id/selectProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="10dp"
+            android:background="#ededed"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingVertical="20dp"
+            android:weightSum="1">
+
+            <RadioButton
+                android:id="@+id/selectFaculty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight=".5"
+                android:checked="true"
+                android:onClick="selectProfile"
+                android:text="Faculty" />
+
+            <RadioButton
+                android:id="@+id/selectStudent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight=".5"
+                android:onClick="selectProfile"
+                android:text="Student" />
+        </RadioGroup>
     </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.core.widget.NestedScrollView>
