@@ -15,6 +15,7 @@ import androidx.core.widget.NestedScrollView;
 
 import com.mtx.mobile.employee.db.DatabaseHelper;
 import com.mtx.mobile.employee.faculty.FacultyDashboard;
+import com.mtx.mobile.employee.faculty.FacultyHomeActivity;
 import com.mtx.mobile.employee.utils.InputValidation;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -110,8 +111,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.appCompatButtonLogin:
-                moveToDashBoard();
-                //verifyFromSQLite();
+                //moveToDashBoard();
+                verifyFromSQLite();
                 break;
             case R.id.textViewLinkRegister:
                 // Navigate to RegisterActivity
@@ -156,7 +157,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 , textInputEditTextPassword.getText().toString().trim())) {
 
 
-            Intent accountsIntent = new Intent(activity, UsersListActivity.class);
+            Intent accountsIntent = new Intent(activity, FacultyDashboard.class);
             accountsIntent.putExtra("EMAIL", textInputEditTextEmail.getText().toString().trim());
             emptyInputEditText();
             startActivity(accountsIntent);

@@ -20,12 +20,14 @@ public class FacultyHomeActivity extends AppCompatActivity {
     private RecyclerView rvEvent;
     private List<EventModel> modelList = new ArrayList<>();
     private Toolbar toolbar;
+    private String selectedDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_faculty_home);
         toolbar = findViewById(R.id.toolBar);
+        selectedDate = getIntent().getStringExtra("selectedDate");
         initView();
     }
 
@@ -34,11 +36,12 @@ public class FacultyHomeActivity extends AppCompatActivity {
         rvEvent.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false));
         modelList.clear();
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+
         if (Constant.MODULE_TYPE.equals("HOME")) {
             toolbar.setTitle("Event:  " + formatter.format(new Date()));
             modelList = getEventList();
         } else if (Constant.MODULE_TYPE.equals("Academic")) {
-            toolbar.setTitle("Academic:  " + formatter.format(new Date()));
+            toolbar.setTitle("Academic:  " + selectedDate);
             modelList = getAcademicList();
         } else if (Constant.MODULE_TYPE.equals("Placement")) {
             toolbar.setTitle("Placement:  " + formatter.format(new Date()));
