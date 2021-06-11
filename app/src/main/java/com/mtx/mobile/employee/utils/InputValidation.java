@@ -36,7 +36,7 @@ public class InputValidation {
             hideKeyboardFrom(textInputEditText);
             return false;
         } else {
-            textInputEditText.setEnabled(false);
+            textInputEditText.setEnabled(true);
         }
 
         return true;
@@ -57,7 +57,7 @@ public class InputValidation {
             hideKeyboardFrom(textInputEditText);
             return false;
         } else {
-            textInputEditText.setEnabled(false);
+            textInputEditText.setEnabled(true);
         }
         return true;
     }
@@ -70,7 +70,7 @@ public class InputValidation {
             hideKeyboardFrom(textInputEditText2);
             return false;
         } else {
-            textInputEditText1.setEnabled(false);
+            textInputEditText1.setEnabled(true);
         }
         return true;
     }

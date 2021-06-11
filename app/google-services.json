@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "854934245861",
+    "firebase_url": "https://student-a98cc-default-rtdb.firebaseio.com",
+    "project_id": "student-a98cc",
+    "storage_bucket": "student-a98cc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:854934245861:android:b1f464b10fb9ea52c35f0c",
+        "android_client_info": {
+          "package_name": "com.mtx.mobile.employee"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "854934245861-msqgv75551330rp77jmdngc26ubc9m92.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgwfaDPC3gAZmlcxHpV7wZ-lTITsTB_6g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "854934245861-msqgv75551330rp77jmdngc26ubc9m92.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

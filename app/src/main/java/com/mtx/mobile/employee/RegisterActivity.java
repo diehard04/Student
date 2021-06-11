@@ -2,8 +2,12 @@ package com.mtx.mobile.employee;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -32,6 +36,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private InputValidation inputValidation;
     private DatabaseHelper databaseHelper;
     private User user;
+    private TextView tvRegisterUserType;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,6 +63,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         appCompatTextViewLoginLink = (AppCompatTextView) findViewById(R.id.appCompatTextViewLoginLink);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        tvRegisterUserType = findViewById(R.id.tvRegisterUserType);
+        tvRegisterUserType.setText("Faculty");
 
     }
 
@@ -128,11 +135,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
 
         if (!databaseHelper.checkUser(textInputEditTextEmail.getText().toString().trim())) {
-
             user.setName(textInputEditTextName.getText().toString().trim());
             user.setEmail(textInputEditTextEmail.getText().toString().trim());
             user.setPassword(textInputEditTextPassword.getText().toString().trim());
-
+            user.setUserType(tvRegisterUserType.getText().toString().trim());
             databaseHelper.addUser(user);
 
             // Snack Bar to show success message that record saved successfully
@@ -158,5 +164,26 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         textInputEditTextPassword.setText(null);
         textInputEditTextConfirmPassword.setText(null);
         moveToLoginPage();
+    }
+
+    public void registerSelectProfile(View view) {
+        boolean checked = ((RadioButton) view).isChecked();
+
+        switch (view.getId()) {
+            case R.id.registerSelectFaculty:
+                if (checked) {
+                    tvRegisterUserType.setText("Faculty");
+                    Toast.makeText(getBaseContext(), "Your have selected Faculty profile", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            case R.id.registerSelectStudent:
+                if (checked) {
+                    tvRegisterUserType.setText("Student");
+                    Toast.makeText(getBaseContext(), "Your have selected Student profile", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+        }
     }
 }

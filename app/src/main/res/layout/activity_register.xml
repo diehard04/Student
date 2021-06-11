@@ -9,7 +9,7 @@
     android:paddingTop="20dp"
     android:paddingRight="20dp"
     android:paddingBottom="20dp"
-    tools:context="LoginActivity">
+    tools:context=".RegisterActivity">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
@@ -23,6 +23,16 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="40dp"
             android:src="@drawable/rv_college" />
+
+        <TextView
+            android:id="@+id/tvRegisterUserType"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -88,6 +98,38 @@
                 android:inputType="textPassword"
                 android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <RadioGroup
+            android:id="@+id/registerSelectProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="10dp"
+            android:background="#ededed"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingVertical="20dp"
+            android:weightSum="1">
+
+            <RadioButton
+                android:id="@+id/registerSelectFaculty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight=".5"
+                android:checked="true"
+                android:onClick="registerSelectProfile"
+                android:text="Faculty" />
+
+            <RadioButton
+                android:id="@+id/registerSelectStudent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight=".5"
+                android:onClick="registerSelectProfile"
+                android:text="Student" />
+        </RadioGroup>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/appCompatButtonRegister"

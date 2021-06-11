@@ -4,7 +4,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.mtx.mobile.employee.model.User;
 
@@ -27,11 +29,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_USER_NAME = "user_name";
     private static final String COLUMN_USER_EMAIL = "user_email";
     private static final String COLUMN_USER_PASSWORD = "user_password";
+    private static final String COLUMN_USER_TYPE = "user_type";
 
     // create table sql query
     private String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USER + "("
             + COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_USER_NAME + " TEXT,"
-            + COLUMN_USER_EMAIL + " TEXT," + COLUMN_USER_PASSWORD + " TEXT" + ")";
+            + COLUMN_USER_EMAIL + " TEXT,"
+            + COLUMN_USER_PASSWORD + " TEXT,"
+            + COLUMN_USER_TYPE + " TEXT"
+            + ")";
 
     // drop table sql query
     private String DROP_USER_TABLE = "DROP TABLE IF EXISTS " + TABLE_USER;
@@ -74,7 +80,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_USER_NAME, user.getName());
         values.put(COLUMN_USER_EMAIL, user.getEmail());
         values.put(COLUMN_USER_PASSWORD, user.getPassword());
-
+        values.put(COLUMN_USER_TYPE, user.getUserType());
         // Inserting Row
         db.insert(TABLE_USER, null, values);
         db.close();
@@ -91,11 +97,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_USER_ID,
                 COLUMN_USER_EMAIL,
                 COLUMN_USER_NAME,
-                COLUMN_USER_PASSWORD
+                COLUMN_USER_PASSWORD,
+                COLUMN_USER_TYPE
         };
         // sorting orders
-        String sortOrder =
-                COLUMN_USER_NAME + " ASC";
+        String sortOrder = COLUMN_USER_NAME + " ASC";
         List<User> userList = new ArrayList<User>();
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -148,8 +154,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_USER_PASSWORD, user.getPassword());
 
         // updating row
-        db.update(TABLE_USER, values, COLUMN_USER_ID + " = ?",
-                new String[]{String.valueOf(user.getId())});
+        db.update(TABLE_USER, values, COLUMN_USER_ID + " = ?", new String[]{String.valueOf(user.getId())});
         db.close();
     }
 
@@ -253,5 +258,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         return false;
+    }
+
+    public String getUserType(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String rawQuery = "SELECT * FROM " + TABLE_USER + " WHERE " + COLUMN_USER_EMAIL + " ='" + email + "'";
+        Cursor c = db.rawQuery(rawQuery, null);
+        String userType = null;
+        try {
+            if (c.moveToFirst()) {
+                do {
+                    userType = c.getString(c.getColumnIndex(COLUMN_USER_TYPE));
+                } while (c.moveToNext());
+            }
+        } catch (SQLiteException e) {
+            Log.d("getUserType = ", e.getMessage());
+        }
+        c.close();
+        return userType;
     }
 }

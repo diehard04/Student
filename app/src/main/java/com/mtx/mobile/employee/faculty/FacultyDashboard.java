@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mtx.mobile.employee.R;
+import com.mtx.mobile.employee.student.StudentAcademicActivity;
 import com.mtx.mobile.employee.utils.Constant;
 
 import java.util.Calendar;
@@ -21,6 +22,7 @@ public class FacultyDashboard extends AppCompatActivity {
     private String email;
     private TextView user_name;
     public int mMonth, mYear, mDay, mHour, mMin, id;
+    private String userType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +31,7 @@ public class FacultyDashboard extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent !=null) {
             email = intent.getStringExtra("EMAIL");
+            userType = intent.getStringExtra("userType");
         }
         initView();
     }
@@ -52,7 +55,12 @@ public class FacultyDashboard extends AppCompatActivity {
         llAcademic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openDateDialogForEscalationSummary();
+                if (userType.equalsIgnoreCase("Student")) {
+                    Intent intent = new Intent(FacultyDashboard.this, StudentAcademicActivity.class);
+                    startActivity(intent);
+                } else {
+                    openDateDialogForEscalationSummary();
+                }
             }
         });
 
@@ -103,7 +111,7 @@ public class FacultyDashboard extends AppCompatActivity {
                     startActivity(intent);
                 }
             }, mYear, mMonth, mDay);
-            datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
             datePickerDialog.show();
         }
     }

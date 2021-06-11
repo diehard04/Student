@@ -2,6 +2,7 @@ package com.mtx.mobile.employee;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -132,7 +133,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         } else {
             textInputEditTextEmail.setError(null);
             textInputEditTextPassword.setError(null);
-            Intent intent =new Intent(this, FacultyDashboard.class);
+            Intent intent = new Intent(this, FacultyDashboard.class);
             intent.putExtra("email", textInputEditTextEmail.getText().toString().trim());
             startActivity(intent);
             finish();
@@ -152,18 +153,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (!inputValidation.isInputEditTextFilled(textInputEditTextPassword, getString(R.string.error_message_email))) {
             return;
         }
+        boolean checkUser = databaseHelper.checkUser(textInputEditTextEmail.getText().toString().trim()
+                , textInputEditTextPassword.getText().toString().trim());
+        Log.d("checkuser = ", checkUser + "");
+        if (checkUser) {
+            String user = databaseHelper.getUserType(textInputEditTextEmail.getText().toString().trim());
+            Log.d("user Type = ", userType + " ");
+            if (user != null && user.equals(userType.getText().toString())) {
+                Intent accountsIntent = new Intent(activity, FacultyDashboard.class);
+                accountsIntent.putExtra("EMAIL", textInputEditTextEmail.getText().toString().trim());
+                accountsIntent.putExtra("userType", userType.getText().toString());
+                emptyInputEditText();
+                startActivity(accountsIntent);
 
-        if (databaseHelper.checkUser(textInputEditTextEmail.getText().toString().trim()
-                , textInputEditTextPassword.getText().toString().trim())) {
-
-
-            Intent accountsIntent = new Intent(activity, FacultyDashboard.class);
-            accountsIntent.putExtra("EMAIL", textInputEditTextEmail.getText().toString().trim());
-            emptyInputEditText();
-            startActivity(accountsIntent);
-
-
+            } else {
+                Toast.makeText(getApplicationContext(), "Please select user type " + user, Toast.LENGTH_SHORT).show();
+            }
         } else {
+            Toast.makeText(getApplicationContext(), "User Email or Password is incorrect", Toast.LENGTH_SHORT).show();
             // Snack Bar to show success message that record is wrong
             //Snackbar.make(nestedScrollView, getString(R.string.error_valid_email_password), Snackbar.LENGTH_LONG).show();
         }
