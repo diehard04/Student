@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.mtx.mobile.employee.R;
 import com.mtx.mobile.employee.student.StudentAcademicActivity;
+import com.mtx.mobile.employee.student.StudentPlacementActivity;
 import com.mtx.mobile.employee.utils.Constant;
 
 import java.util.Calendar;
@@ -59,7 +60,7 @@ public class FacultyDashboard extends AppCompatActivity {
                     Intent intent = new Intent(FacultyDashboard.this, StudentAcademicActivity.class);
                     startActivity(intent);
                 } else {
-                    openDateDialogForEscalationSummary();
+                    openDateDialogForEscalationSummary("academic");
                 }
             }
         });
@@ -67,9 +68,12 @@ public class FacultyDashboard extends AppCompatActivity {
         llPlacement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(FacultyDashboard.this, FacultyHomeActivity.class);
-                Constant.MODULE_TYPE = "Placement";
-                startActivity(intent);
+                if (userType.equalsIgnoreCase("Student")) {
+                    Intent intent = new Intent(FacultyDashboard.this, StudentPlacementActivity.class);
+                    startActivity(intent);
+                } else {
+                    openDateDialogForEscalationSummary("placement");
+                }
             }
         });
 
@@ -83,7 +87,7 @@ public class FacultyDashboard extends AppCompatActivity {
         });
     }
 
-    private void openDateDialogForEscalationSummary() {
+    private void openDateDialogForEscalationSummary(String eventType) {
         // get current date
         final Calendar c = Calendar.getInstance();
         mYear = c.get(Calendar.YEAR);
@@ -105,10 +109,18 @@ public class FacultyDashboard extends AppCompatActivity {
                     else
                         mday = "" + dayOfMonth;
                     String selectedDate = mday + "-" + (mmonth) + "-" + year;
-                    Intent intent = new Intent(FacultyDashboard.this, FacultyAcademicActivity.class);
-                    Constant.MODULE_TYPE = "Academic";
-                    intent.putExtra("selectedDate", selectedDate);
-                    startActivity(intent);
+                    if (eventType.equalsIgnoreCase("academic")) {
+                        Intent intent = new Intent(FacultyDashboard.this, FacultyAcademicActivity.class);
+                        Constant.MODULE_TYPE = "Academic";
+                        intent.putExtra("selectedDate", selectedDate);
+                        startActivity(intent);
+
+                    } else if (eventType.equalsIgnoreCase("placement")) {
+                        Intent intent = new Intent(FacultyDashboard.this, FacultyPlacementActivity.class);
+                        Constant.MODULE_TYPE = "Placement";
+                        intent.putExtra("selectedDate", selectedDate);
+                        startActivity(intent);
+                    }
                 }
             }, mYear, mMonth, mDay);
             datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());

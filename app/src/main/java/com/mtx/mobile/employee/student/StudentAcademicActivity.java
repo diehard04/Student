@@ -58,6 +58,7 @@ public class StudentAcademicActivity extends AppCompatActivity {
     }
 
     private void getDocListFromFirebase() {
+        list.clear();
         dialog = new ProgressDialog(this);
         dialog.setMessage("Loading..");
         dialog.show();

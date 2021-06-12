@@ -14,8 +14,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".student.ViewPdfActivity"></activity>
-        <activity android:name=".student.StudentAcademicActivity"></activity>
+        <activity android:name=".student.StudentPlacementActivity"/>
+        <activity android:name=".faculty.FacultyPlacementActivity" />
+        <activity android:name=".student.ViewPdfActivity" />
+        <activity android:name=".student.StudentAcademicActivity" />
         <activity android:name=".faculty.FacultyAcademicActivity" />
         <activity android:name=".faculty.FacultyHomeActivity" />
         <activity android:name=".faculty.FacultyDashboard" />
@@ -37,7 +39,7 @@
             android:theme="@style/register" />
         <activity
             android:name=".LoginActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".UsersListActivity"
             android:screenOrientation="portrait" />
