@@ -9,6 +9,10 @@ public class UploadInfo {
     private String url;
     private String dateTime;
 
+    private String eventName;
+    private String eventTime;
+    private String eventDescription;
+
     public  UploadInfo() {
     }
 
@@ -17,6 +21,16 @@ public class UploadInfo {
         this.url = url;
         this.dateTime = dateTime;
     }
+
+    public UploadInfo(String name, String url, String dateTime, String eventName, String eventTime, String eventDescription) {
+        this.name = name;
+        this.url = url;
+        this.dateTime = dateTime;
+        this.eventName = eventName;
+        this.eventTime = eventTime;
+        this.eventDescription = eventDescription;
+    }
+
 
     public String getName() {
         return name;
@@ -40,5 +54,29 @@ public class UploadInfo {
 
     public void setDateTime(String dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public String getEventName() {
+        return eventName;
+    }
+
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
+    }
+
+    public String getEventTime() {
+        return eventTime;
+    }
+
+    public void setEventTime(String eventTime) {
+        this.eventTime = eventTime;
+    }
+
+    public String getEventDescription() {
+        return eventDescription;
+    }
+
+    public void setEventDescription(String eventDescription) {
+        this.eventDescription = eventDescription;
     }
 }

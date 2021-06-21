@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NotificationCompat;
 
@@ -30,6 +31,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -64,6 +66,10 @@ public class FacultyPlacementActivity extends AppCompatActivity {
     private final static String notification_channel_name = "notification_channel_name";
     private StorageReference mStorageRef;
     private DatabaseReference mDataBaseRef;
+    private AppCompatButton bttnSubmit;
+    private List<Uri> uriList = new ArrayList<>();
+    private AppCompatEditText etEventName, etEventTime, etEventDescription;
+    private TextInputLayout tilEventName, tilEventTime, tilEventDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +85,7 @@ public class FacultyPlacementActivity extends AppCompatActivity {
         askPermission();
         initView();
     }
+
     private void askPermission() {
         AndPermission.with(this)
                 .runtime()
@@ -112,7 +119,55 @@ public class FacultyPlacementActivity extends AppCompatActivity {
 
     private void initView() {
         bttnPicDoc = findViewById(R.id.bttnPicDoc);
+        bttnSubmit = findViewById(R.id.bttnSubmit);
 
+        etEventName = findViewById(R.id.etEventName);
+        etEventTime = findViewById(R.id.etEventTime);
+        etEventDescription = findViewById(R.id.etEventDescription);
+
+        tilEventName = findViewById(R.id.tilEventName);
+        tilEventTime = findViewById(R.id.tilEventTime);
+        tilEventDescription = findViewById(R.id.tilEventDescription);
+
+        bttnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (uriList.size() == 0) {
+                    Toast.makeText(getApplicationContext(), "Please select Doc", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (etEventName.getText().toString().trim().isEmpty()) {
+                    tilEventName.setError("please Enter Event Name");
+                    return;
+                } else {
+                    etEventName.setEnabled(true);
+                    tilEventName.setError("");
+                }
+                if (etEventTime.getText().toString().trim().isEmpty()) {
+                    tilEventTime.setError("please Enter Event Time");
+                    return;
+                } else {
+                    etEventTime.setEnabled(true);
+                    tilEventTime.setError("");
+                }
+                if (etEventDescription.getText().toString().trim().isEmpty()) {
+                    tilEventDescription.setError("please Enter Event Description");
+                    return;
+                } else {
+                    etEventDescription.setEnabled(true);
+                    tilEventDescription.setError("");
+                }
+
+                for (int i = 0; i < uriList.size(); i++) {
+                    String name = etEventName.getText().toString();
+                    String date = etEventTime.getText().toString();
+                    String desc = etEventDescription.getText().toString();
+                    Log.d("FacultyPlacement ", " name = " + name+ " date = " + date + " desc = " + desc);
+                    uploadFileToServer(uriList.get(i), name, date, desc);
+                }
+
+            }
+        });
     }
 
     @Override
@@ -129,7 +184,7 @@ public class FacultyPlacementActivity extends AppCompatActivity {
                         Uri uri = (Uri) docPaths.get(i);
                         String s = getRealPathFromUri(getApplicationContext(), uri);
                         Log.d("file ", s);
-                        uploadFileToServer(uri);
+                        uriList.add(uri);
                     }
 //                    String path = getFilePath();
 //                    File file =  new File(path,"temp");
@@ -157,7 +212,7 @@ public class FacultyPlacementActivity extends AppCompatActivity {
         //addThemToView(photoPaths, docPaths);
     }
 
-    private void uploadFileToServer(final Uri uri) {
+    private void uploadFileToServer(final Uri uri, String eventName, String eventTime, String eventDescription) {
         try {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
             if (uri != null) {
@@ -175,7 +230,7 @@ public class FacultyPlacementActivity extends AppCompatActivity {
                                 //hiding the progress dialog
                                 progressDialog.dismiss();
                                 File file = new File(uri.toString());
-                                String filename=file.getPath().substring(file.getPath().lastIndexOf("/")+1);
+                                String filename = file.getPath().substring(file.getPath().lastIndexOf("/") + 1);
                                 addNotification(filename);
 
 
@@ -187,7 +242,7 @@ public class FacultyPlacementActivity extends AppCompatActivity {
                                         String str = sdf.format(new Date());
 
                                         String dateTime = selectedDate + " " + str;
-                                        UploadInfo model = new UploadInfo(name, uri.toString(), dateTime);
+                                        UploadInfo model = new UploadInfo(name, uri.toString(), dateTime, eventName, eventTime, eventDescription);
 
                                         String uploadId = mDataBaseRef.push().getKey();
                                         mDataBaseRef.child(uploadId).setValue(model);
@@ -260,7 +315,7 @@ public class FacultyPlacementActivity extends AppCompatActivity {
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel mChannel = new NotificationChannel(notification_channel_id, notification_channel_name , importance);
+            NotificationChannel mChannel = new NotificationChannel(notification_channel_id, notification_channel_name, importance);
             mChannel.setDescription("Student");
             mChannel.enableVibration(true);
             mChannel.setLightColor(Color.RED);
@@ -298,6 +353,6 @@ public class FacultyPlacementActivity extends AppCompatActivity {
     private String getFileExtentaion(Uri uri) {
         ContentResolver contentResolver = getContentResolver();
         MimeTypeMap map = MimeTypeMap.getSingleton();
-        return  map.getExtensionFromMimeType(contentResolver.getType(uri));
+        return map.getExtensionFromMimeType(contentResolver.getType(uri));
     }
 }

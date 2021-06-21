@@ -42,6 +42,9 @@ public class StudentAcademicAdapter extends RecyclerView.Adapter<StudentAcademic
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.tvDoc.setText(list.get(position).getName());
+        holder.tvEventName.setText(list.get(position).getEventName());
+        holder.tvEventTime.setText(list.get(position).getEventTime());
+        holder.tvEventDes.setText(list.get(position).getEventDescription());
         holder.tvDoc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,12 +66,15 @@ public class StudentAcademicAdapter extends RecyclerView.Adapter<StudentAcademic
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
-        private TextView tvDoc;
+        private TextView tvDoc, tvEventName, tvEventTime, tvEventDes;
 
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             tvDoc = itemView.findViewById(R.id.tvDoc);
+            tvEventName = itemView.findViewById(R.id.tvEventName);
+            tvEventTime = itemView.findViewById(R.id.tvEventDate);
+            tvEventDes = itemView.findViewById(R.id.tvEventDesc);
         }
     }
 
