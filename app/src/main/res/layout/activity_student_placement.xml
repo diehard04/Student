@@ -39,6 +39,24 @@
             android:background="@drawable/ic_action_name" />
     </LinearLayout>
 
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/searchEvent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:hint="Please select Event Name"
+        android:paddingVertical="@dimen/permission_dp_10"
+        android:textSize="@dimen/permission_sp_16"
+        android:textStyle="bold" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/bttnEvent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/permission_dp_20"
+        android:background="@color/colorPrimary"
+        android:text="Search" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvStudentDoc"
         android:layout_width="match_parent"

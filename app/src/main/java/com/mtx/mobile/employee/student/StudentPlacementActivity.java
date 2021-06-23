@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,6 +44,8 @@ public class StudentPlacementActivity extends AppCompatActivity {
     private View viewPickDate;
     public int mMonth, mYear, mDay, mHour, mMin, id;
     private Toolbar toolBar;
+    private AppCompatEditText searchEvent;
+    private AppCompatButton bttnEvent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,7 @@ public class StudentPlacementActivity extends AppCompatActivity {
 
         initView();
     }
+
     private void getDocListFromFirebase(String selectedDate) {
         list.clear();
         dialog = new ProgressDialog(this);
@@ -103,7 +108,21 @@ public class StudentPlacementActivity extends AppCompatActivity {
             }
         });
         toolBar = findViewById(R.id.toolBar);
+        toolBar.setTitle("Event Date : ");
 
+        bttnEvent = findViewById(R.id.bttnEvent);
+        searchEvent = findViewById(R.id.searchEvent);
+
+        bttnEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (searchEvent.getText().toString().isEmpty()) {
+                    searchEvent.setError("Please Enter company Name");
+                    return;
+                }
+                getDocListFromFirebaseWithCompanyName(searchEvent.getText().toString().trim());
+            }
+        });
     }
 
     private void pickDate() {
@@ -156,4 +175,42 @@ public class StudentPlacementActivity extends AppCompatActivity {
         MimeTypeMap map = MimeTypeMap.getSingleton();
         return map.getExtensionFromMimeType(contentResolver.getType(uri));
     }
+
+    private void getDocListFromFirebaseWithCompanyName(String companyName) {
+        list.clear();
+        dialog = new ProgressDialog(this);
+        dialog.setMessage("Loading..");
+        dialog.show();
+
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference("placement");
+        mDatabaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot postSnapShot : snapshot.getChildren()) {
+                    UploadInfo uploadInfo = postSnapShot.getValue(UploadInfo.class);
+                    Long currentDate = Common.convertdateToLong(Common.getCurrentDateAndTime());
+                    Long accessDate = Common.convertdateToLong(uploadInfo.getDateTime());
+                    String userCompanyName = uploadInfo.getEventName();
+                    if ((currentDate > accessDate)) {
+                        if (userCompanyName != null && userCompanyName.equalsIgnoreCase(companyName))
+                            list.add(uploadInfo);
+                    }
+                }
+                if (list.size() == 0) {
+                    Toast.makeText(getApplicationContext(), "There is no data for : " + companyName, Toast.LENGTH_SHORT).show();
+                }
+                adapter.notifyDataSetChanged();
+                dialog.dismiss();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getApplicationContext(), "Database Error : " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+
+            }
+        });
+
+    }
+
 }

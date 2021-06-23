@@ -31,7 +31,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_weight=".4"
+                android:layout_weight=".3"
                 android:id="@+id/tvEventName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
                 android:textSize="14sp" />
 
             <TextView
-                android:layout_weight=".4"
+                android:layout_weight=".3"
                 android:id="@+id/tvEventTime"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
                 android:textSize="14sp" />
 
             <TextView
-                android:layout_weight=".4"
+                android:layout_weight=".3"
                 android:id="@+id/tvEventVenue"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
                 android:textSize="14sp" />
 
             <TextView
-                android:layout_weight=".4"
+                android:layout_weight=".3"
                 android:id="@+id/tvEventDesc"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
