@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".faculty.FacultyPlacementActivity">
+    tools:context=".faculty.FacultyEventsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout"
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="@dimen/permission_dp_10"
             android:background="@drawable/edittextround"
-            android:hint="Please enter Company Name"
+            android:hint="Please enter Event Name"
             android:paddingTop="5dp">
 
             <androidx.appcompat.widget.AppCompatEditText
@@ -55,11 +55,28 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="@dimen/permission_dp_10"
             android:background="@drawable/edittextround"
-            android:hint="Please enter Venue"
+            android:hint="Please enter Event Time"
             android:paddingTop="5dp">
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etEventTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilEventVenue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/permission_dp_10"
+            android:background="@drawable/edittextround"
+            android:hint="Please enter Event Venue"
+            android:paddingTop="5dp">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etEventVenue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
@@ -72,7 +89,7 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="@dimen/permission_dp_10"
             android:background="@drawable/edittextround"
-            android:hint="Please enter Eligibility Criteria"
+            android:hint="Please enter Event Description"
             android:paddingTop="5dp">
 
             <androidx.appcompat.widget.AppCompatEditText

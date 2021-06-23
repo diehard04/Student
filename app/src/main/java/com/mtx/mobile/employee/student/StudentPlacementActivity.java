@@ -1,10 +1,5 @@
 package com.mtx.mobile.employee.student;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -15,6 +10,12 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.DatePicker;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,6 +41,7 @@ public class StudentPlacementActivity extends AppCompatActivity {
     ProgressDialog dialog;
     private View viewPickDate;
     public int mMonth, mYear, mDay, mHour, mMin, id;
+    private Toolbar toolBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +102,8 @@ public class StudentPlacementActivity extends AppCompatActivity {
                 pickDate();
             }
         });
+        toolBar = findViewById(R.id.toolBar);
+
     }
 
     private void pickDate() {
@@ -124,7 +128,7 @@ public class StudentPlacementActivity extends AppCompatActivity {
                     else
                         mday = "" + dayOfMonth;
                     String selectedDate = mday + "-" + (mmonth) + "-" + year;
-
+                    toolBar.setTitle("Event Date : " + selectedDate);
                     getDocListFromFirebase(selectedDate);
 
 //                    Intent intent = new Intent(FacultyDashboard.this, FacultyAcademicActivity.class);

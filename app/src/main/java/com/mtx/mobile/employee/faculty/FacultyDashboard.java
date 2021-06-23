@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.mtx.mobile.employee.R;
 import com.mtx.mobile.employee.student.StudentAcademicActivity;
+import com.mtx.mobile.employee.student.StudentEventsActivity;
 import com.mtx.mobile.employee.student.StudentPlacementActivity;
 import com.mtx.mobile.employee.utils.Constant;
 
@@ -19,7 +20,7 @@ import java.util.Calendar;
 
 public class FacultyDashboard extends AppCompatActivity {
 
-    private LinearLayout llHome, llAcademic, llPlacement, llCulturalActivities;
+    private LinearLayout llHome, llAcademic, llPlacement, llEvents;
     private String email;
     private TextView user_name;
     public int mMonth, mYear, mDay, mHour, mMin, id;
@@ -41,7 +42,7 @@ public class FacultyDashboard extends AppCompatActivity {
         llHome= findViewById(R.id.llHome);
         llAcademic = findViewById(R.id.llAcademic);
         llPlacement = findViewById(R.id.llPlacement);
-        llCulturalActivities = findViewById(R.id.llCulturalActivities);
+        llEvents = findViewById(R.id.llCulturalActivities);
         user_name = findViewById(R.id.user_name);
         user_name.setText(email);
         llHome.setOnClickListener(new View.OnClickListener() {
@@ -77,12 +78,15 @@ public class FacultyDashboard extends AppCompatActivity {
             }
         });
 
-        llCulturalActivities.setOnClickListener(new View.OnClickListener() {
+        llEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(FacultyDashboard.this, FacultyHomeActivity.class);
-                Constant.MODULE_TYPE = "CulturalActivities";
-                startActivity(intent);
+                if (userType.equalsIgnoreCase("Student")) {
+                    Intent intent = new Intent(FacultyDashboard.this, StudentEventsActivity.class);
+                    startActivity(intent);
+                } else {
+                    openDateDialogForEscalationSummary("events");
+                }
             }
         });
     }
@@ -118,6 +122,12 @@ public class FacultyDashboard extends AppCompatActivity {
                     } else if (eventType.equalsIgnoreCase("placement")) {
                         Intent intent = new Intent(FacultyDashboard.this, FacultyPlacementActivity.class);
                         Constant.MODULE_TYPE = "Placement";
+                        intent.putExtra("selectedDate", selectedDate);
+                        startActivity(intent);
+                    }
+                    else if (eventType.equalsIgnoreCase("events")) {
+                        Intent intent = new Intent(FacultyDashboard.this, FacultyEventsActivity.class);
+                        Constant.MODULE_TYPE = "Events";
                         intent.putExtra("selectedDate", selectedDate);
                         startActivity(intent);
                     }

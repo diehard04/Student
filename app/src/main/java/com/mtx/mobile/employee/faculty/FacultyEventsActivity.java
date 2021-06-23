@@ -54,7 +54,7 @@ import java.util.List;
 import droidninja.filepicker.FilePickerBuilder;
 import droidninja.filepicker.FilePickerConst;
 
-public class FacultyPlacementActivity extends AppCompatActivity {
+public class FacultyEventsActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private String selectedDate;
@@ -68,24 +68,23 @@ public class FacultyPlacementActivity extends AppCompatActivity {
     private DatabaseReference mDataBaseRef;
     private AppCompatButton bttnSubmit;
     private List<Uri> uriList = new ArrayList<>();
-    private AppCompatEditText etEventName, etEventTime, etEventDescription;
-    private TextInputLayout tilEventName, tilEventTime, tilEventDescription;
+    private AppCompatEditText etEventName, etEventTime,etEventVenue,  etEventDescription;
+    private TextInputLayout tilEventName, tilEventTime, tilEventVenue, tilEventDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_faculty_placement);
+        setContentView(R.layout.activity_faculty_events);
         toolbar = findViewById(R.id.toolBar);
-        mStorageRef = FirebaseStorage.getInstance().getReference("placement");
-        mDataBaseRef = FirebaseDatabase.getInstance().getReference("placement");
+        mStorageRef = FirebaseStorage.getInstance().getReference("Events");
+        mDataBaseRef = FirebaseDatabase.getInstance().getReference("Events");
         // get the Firebase  storage reference
 
         selectedDate = getIntent().getStringExtra("selectedDate");
-        toolbar.setTitle("Placement Event:  " + selectedDate);
+        toolbar.setTitle("Events:  " + selectedDate);
         askPermission();
         initView();
     }
-
     private void askPermission() {
         AndPermission.with(this)
                 .runtime()
@@ -100,7 +99,7 @@ public class FacultyPlacementActivity extends AppCompatActivity {
                                 FilePickerBuilder.getInstance()
                                         .setMaxCount(10) //optional
                                         .setActivityTheme(R.style.LibAppTheme) //optional
-                                        .pickFile(FacultyPlacementActivity.this);
+                                        .pickFile(FacultyEventsActivity.this);
 
                             }
                         });
@@ -123,10 +122,12 @@ public class FacultyPlacementActivity extends AppCompatActivity {
 
         etEventName = findViewById(R.id.etEventName);
         etEventTime = findViewById(R.id.etEventTime);
+        etEventVenue = findViewById(R.id.etEventVenue);
         etEventDescription = findViewById(R.id.etEventDescription);
 
         tilEventName = findViewById(R.id.tilEventName);
         tilEventTime = findViewById(R.id.tilEventTime);
+        tilEventVenue = findViewById(R.id.tilEventVenue);
         tilEventDescription = findViewById(R.id.tilEventDescription);
 
         bttnSubmit.setOnClickListener(new View.OnClickListener() {
@@ -137,21 +138,28 @@ public class FacultyPlacementActivity extends AppCompatActivity {
                     return;
                 }
                 if (etEventName.getText().toString().trim().isEmpty()) {
-                    tilEventName.setError("Please enter Company Name");
+                    tilEventName.setError("Please enter Event  Name");
                     return;
                 } else {
                     etEventName.setEnabled(true);
                     tilEventName.setError("");
                 }
                 if (etEventTime.getText().toString().trim().isEmpty()) {
-                    tilEventTime.setError("please Enter Venue");
+                    tilEventTime.setError("please Enter Time");
                     return;
                 } else {
                     etEventTime.setEnabled(true);
                     tilEventTime.setError("");
                 }
+                if (etEventVenue.getText().toString().trim().isEmpty()) {
+                    tilEventVenue.setError("Please enter Event Venue");
+                    return;
+                } else {
+                    etEventVenue.setEnabled(true);
+                    tilEventVenue.setError("");
+                }
                 if (etEventDescription.getText().toString().trim().isEmpty()) {
-                    tilEventDescription.setError("Please enter Eligibility Criteria");
+                    tilEventDescription.setError("Please enter Event Description");
                     return;
                 } else {
                     etEventDescription.setEnabled(true);
@@ -160,10 +168,11 @@ public class FacultyPlacementActivity extends AppCompatActivity {
 
                 for (int i = 0; i < uriList.size(); i++) {
                     String name = etEventName.getText().toString();
-                    String date = etEventTime.getText().toString();
+                    String time = etEventTime.getText().toString();
+                    String venue = etEventVenue.getText().toString();
                     String desc = etEventDescription.getText().toString();
-                    Log.d("FacultyPlacement ", " name = " + name+ " date = " + date + " desc = " + desc);
-                    uploadFileToServer(uriList.get(i), name, date, desc);
+                    Log.d("FacultyPlacement ", " name = " + name+ " date = " + time + " desc = " + desc);
+                    uploadFileToServer(uriList.get(i), name, time, venue, desc);
                 }
 
             }
@@ -212,7 +221,7 @@ public class FacultyPlacementActivity extends AppCompatActivity {
         //addThemToView(photoPaths, docPaths);
     }
 
-    private void uploadFileToServer(final Uri uri, String eventName, String eventTime, String eventDescription) {
+    private void uploadFileToServer(final Uri uri, String eventName, String eventTime, String venue,String eventDescription) {
         try {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
             if (uri != null) {
@@ -242,7 +251,7 @@ public class FacultyPlacementActivity extends AppCompatActivity {
                                         String str = sdf.format(new Date());
 
                                         String dateTime = selectedDate + " " + str;
-                                        UploadInfo model = new UploadInfo(name, uri.toString(), dateTime, eventName, eventTime, eventDescription);
+                                        UploadInfo model = new UploadInfo(name, uri.toString(), dateTime, eventName, eventTime, venue ,eventDescription);
 
                                         String uploadId = mDataBaseRef.push().getKey();
                                         mDataBaseRef.child(uploadId).setValue(model);
