@@ -44,7 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
-        android:hint="Please select Event Name"
+        android:hint="Please select Company Name"
         android:paddingVertical="@dimen/permission_dp_10"
         android:textSize="@dimen/permission_sp_16"
         android:textStyle="bold" />

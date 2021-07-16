@@ -64,9 +64,10 @@ public class StudentEventsActivity extends AppCompatActivity {
                     Long currentDate = Common.convertdateToLong(Common.getCurrentDateAndTime());
                     Long accessDate = Common.convertdateToLong(uploadInfo.getDateTime());
 
-                    if ((currentDate > accessDate)) {
-                        list.add(uploadInfo);
+                    if (currentDate > accessDate) {
                     }
+                    list.add(uploadInfo);
+
                 }
                 adapter.notifyDataSetChanged();
                 dialog.dismiss();

@@ -108,7 +108,7 @@ public class StudentPlacementActivity extends AppCompatActivity {
             }
         });
         toolBar = findViewById(R.id.toolBar);
-        toolBar.setTitle("Event Date : ");
+        toolBar.setTitle("Placement Date : ");
 
         bttnEvent = findViewById(R.id.bttnEvent);
         searchEvent = findViewById(R.id.searchEvent);

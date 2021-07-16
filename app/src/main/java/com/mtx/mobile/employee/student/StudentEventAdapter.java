@@ -40,25 +40,25 @@ public class StudentEventAdapter extends RecyclerView.Adapter<StudentEventAdapte
 
     @Override
     public void onBindViewHolder(@NonNull StudentEventAdapter.MyViewHolder holder, int position) {
-        holder.tvDoc.setText(list.get(position).getName());
+        //holder.tvDoc.setText(list.get(position).getName());
         holder.tvEventName.setText(list.get(position).getEventName());
         holder.tvEventTime.setText(list.get(position).getEventTime());
         holder.tvEventDes.setText(list.get(position).getEventDescription());
         holder.tvEventVenue.setText(list.get(position).getEventVenue());
 
-        holder.tvDoc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Opening the upload file in browser using the upload url
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(list.get(position).getUrl()));
-                context.startActivity(intent);
-
-//                Intent intent = new Intent(v.getContext(), ViewPdfActivity.class);
-//                intent.putExtra("url", list.get(position).getUrl());
+//        holder.tvDoc.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //Opening the upload file in browser using the upload url
+//                Intent intent = new Intent(Intent.ACTION_VIEW);
+//                intent.setData(Uri.parse(list.get(position).getUrl()));
 //                context.startActivity(intent);
-            }
-        });
+//
+////                Intent intent = new Intent(v.getContext(), ViewPdfActivity.class);
+////                intent.putExtra("url", list.get(position).getUrl());
+////                context.startActivity(intent);
+//            }
+//        });
     }
 
     @Override

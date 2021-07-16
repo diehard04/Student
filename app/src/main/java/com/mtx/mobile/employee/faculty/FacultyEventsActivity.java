@@ -32,8 +32,11 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -68,7 +71,7 @@ public class FacultyEventsActivity extends AppCompatActivity {
     private DatabaseReference mDataBaseRef;
     private AppCompatButton bttnSubmit;
     private List<Uri> uriList = new ArrayList<>();
-    private AppCompatEditText etEventName, etEventTime,etEventVenue,  etEventDescription;
+    private AppCompatEditText etEventName, etEventTime, etEventVenue, etEventDescription;
     private TextInputLayout tilEventName, tilEventTime, tilEventVenue, tilEventDescription;
 
     @Override
@@ -85,6 +88,7 @@ public class FacultyEventsActivity extends AppCompatActivity {
         askPermission();
         initView();
     }
+
     private void askPermission() {
         AndPermission.with(this)
                 .runtime()
@@ -133,10 +137,10 @@ public class FacultyEventsActivity extends AppCompatActivity {
         bttnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (uriList.size() == 0) {
-                    Toast.makeText(getApplicationContext(), "Please select Doc", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+//                if (uriList.size() == 0) {
+//                    Toast.makeText(getApplicationContext(), "Please select Doc", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
                 if (etEventName.getText().toString().trim().isEmpty()) {
                     tilEventName.setError("Please enter Event  Name");
                     return;
@@ -166,17 +170,27 @@ public class FacultyEventsActivity extends AppCompatActivity {
                     tilEventDescription.setError("");
                 }
 
-                for (int i = 0; i < uriList.size(); i++) {
-                    String name = etEventName.getText().toString();
-                    String time = etEventTime.getText().toString();
-                    String venue = etEventVenue.getText().toString();
-                    String desc = etEventDescription.getText().toString();
-                    Log.d("FacultyPlacement ", " name = " + name+ " date = " + time + " desc = " + desc);
-                    uploadFileToServer(uriList.get(i), name, time, venue, desc);
-                }
-
+                String name = etEventName.getText().toString();
+                String time = etEventTime.getText().toString();
+                String venue = etEventVenue.getText().toString();
+                String desc = etEventDescription.getText().toString();
+                Log.d("FacultyPlacement ", " name = " + name + " date = " + time + " desc = " + desc);
+                //uploadFileToServer(uriList.get(0), name, time, venue, desc);
+                uploadEventInfo(name, time, venue, desc);
             }
         });
+    }
+
+    private void uploadEventInfo(String eventName, String eventTime, String venue, String eventDescription) {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        String str = sdf.format(new Date());
+
+        String dateTime = selectedDate + " " + str;
+        UploadInfo model = new UploadInfo("name", "uri.toString()", dateTime, eventName, eventTime, venue, eventDescription);
+        String uploadId = mDataBaseRef.push().getKey();
+        mDataBaseRef.child(uploadId).setValue(model);
+        Toast.makeText(FacultyEventsActivity.this, "data Uploaded", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
@@ -221,7 +235,7 @@ public class FacultyEventsActivity extends AppCompatActivity {
         //addThemToView(photoPaths, docPaths);
     }
 
-    private void uploadFileToServer(final Uri uri, String eventName, String eventTime, String venue,String eventDescription) {
+    private void uploadFileToServer(final Uri uri, String eventName, String eventTime, String venue, String eventDescription) {
         try {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
             if (uri != null) {
@@ -251,7 +265,7 @@ public class FacultyEventsActivity extends AppCompatActivity {
                                         String str = sdf.format(new Date());
 
                                         String dateTime = selectedDate + " " + str;
-                                        UploadInfo model = new UploadInfo(name, uri.toString(), dateTime, eventName, eventTime, venue ,eventDescription);
+                                        UploadInfo model = new UploadInfo(name, uri.toString(), dateTime, eventName, eventTime, venue, eventDescription);
 
                                         String uploadId = mDataBaseRef.push().getKey();
                                         mDataBaseRef.child(uploadId).setValue(model);
