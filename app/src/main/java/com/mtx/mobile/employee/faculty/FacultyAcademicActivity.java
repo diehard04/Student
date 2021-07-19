@@ -27,11 +27,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NotificationCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -64,7 +69,9 @@ public class FacultyAcademicActivity extends AppCompatActivity {
     private final static String notification_channel_name = "notification_channel_name";
     private StorageReference mStorageRef;
     private DatabaseReference mDataBaseRef;
-
+    private RecyclerView rvEvent;
+    private FacultyAcademicAdapter mAcademicAdapter;
+    private ArrayList<UploadInfo> uploadInfoArrayList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +86,7 @@ public class FacultyAcademicActivity extends AppCompatActivity {
         toolbar.setTitle("Event:  " + selectedDate);
         askPermission();
         initView();
+        getFirebaseData();
     }
 
     private void askPermission() {
@@ -114,7 +122,46 @@ public class FacultyAcademicActivity extends AppCompatActivity {
 
     private void initView() {
         bttnPicDoc = findViewById(R.id.bttnPicDoc);
+        rvEvent = findViewById(R.id.rvEvent);
+        mAcademicAdapter = new FacultyAcademicAdapter(this, uploadInfoArrayList, new FacultyAcademicAdapter.FacultyAcademicInterface() {
+            @Override
+            public void onclick(String uid) {
+                Log.d("uid onclick = ", uid);
+                mDataBaseRef.child(uid).removeValue();
+            }
+        });
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        rvEvent.setLayoutManager(layoutManager);
+        rvEvent.setAdapter(mAcademicAdapter);
+    }
 
+    private void getFirebaseData() {
+        ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setMessage("Loading..");
+        dialog.show();
+        mDataBaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                uploadInfoArrayList.clear();
+                for (DataSnapshot postSnapShot : snapshot.getChildren()) {
+                    UploadInfo uploadInfo = postSnapShot.getValue(UploadInfo.class);
+                    String uid = postSnapShot.getKey();
+                    Log.d("node id= ", uid);
+                    uploadInfo.setUid(uid);
+                    uploadInfoArrayList.add(uploadInfo);
+                }
+                Log.d("list size= ", uploadInfoArrayList.size() +"");
+                mAcademicAdapter.notifyDataSetChanged();
+                dialog.dismiss();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getApplicationContext(), "Database Error : " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+
+            }
+        });
     }
 
     @Override
@@ -177,7 +224,7 @@ public class FacultyAcademicActivity extends AppCompatActivity {
                                 //hiding the progress dialog
                                 progressDialog.dismiss();
                                 File file = new File(uri.toString());
-                                String filename=file.getPath().substring(file.getPath().lastIndexOf("/")+1);
+                                String filename = file.getPath().substring(file.getPath().lastIndexOf("/") + 1);
                                 addNotification(filename);
 
 
@@ -262,7 +309,7 @@ public class FacultyAcademicActivity extends AppCompatActivity {
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel mChannel = new NotificationChannel(notification_channel_id, notification_channel_name , importance);
+            NotificationChannel mChannel = new NotificationChannel(notification_channel_id, notification_channel_name, importance);
             mChannel.setDescription("Student");
             mChannel.enableVibration(true);
             mChannel.setLightColor(Color.RED);
@@ -300,6 +347,6 @@ public class FacultyAcademicActivity extends AppCompatActivity {
     private String getFileExtentaion(Uri uri) {
         ContentResolver contentResolver = getContentResolver();
         MimeTypeMap map = MimeTypeMap.getSingleton();
-        return  map.getExtensionFromMimeType(contentResolver.getType(uri));
+        return map.getExtensionFromMimeType(contentResolver.getType(uri));
     }
 }

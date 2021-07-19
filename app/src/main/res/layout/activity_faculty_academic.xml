@@ -7,6 +7,7 @@
     tools:context=".faculty.FacultyHomeActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -26,11 +27,12 @@
         android:text="Pick Document"
         android:textSize="16sp" />
 
-    <!--    <androidx.recyclerview.widget.RecyclerView-->
-    <!--        android:layout_marginTop="10dp"-->
-    <!--        android:id="@+id/rvEvent"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginHorizontal="20dp"-->
-    <!--        android:orientation="vertical" />-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@+id/appbar_layout"
+        android:id="@+id/rvEvent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical" />
 </RelativeLayout>

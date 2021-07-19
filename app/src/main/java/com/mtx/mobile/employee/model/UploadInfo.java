@@ -14,7 +14,9 @@ public class UploadInfo {
     private String eventDescription;
 
     private String eventVenue;
-    public  UploadInfo() {
+    private String uid;
+
+    public UploadInfo() {
     }
 
     public UploadInfo(String name, String url, String dateTime) {
@@ -32,7 +34,7 @@ public class UploadInfo {
         this.eventDescription = eventDescription;
     }
 
-    public UploadInfo(String name, String url, String dateTime, String eventName, String eventTime, String eventVenue ,String eventDescription) {
+    public UploadInfo(String name, String url, String dateTime, String eventName, String eventTime, String eventVenue, String eventDescription) {
         this.name = name;
         this.url = url;
         this.dateTime = dateTime;
@@ -97,5 +99,13 @@ public class UploadInfo {
 
     public void setEventVenue(String eventVenue) {
         this.eventVenue = eventVenue;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 }
