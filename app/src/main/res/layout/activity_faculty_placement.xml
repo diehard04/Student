@@ -23,6 +23,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
+        android:id="@+id/llPlacement"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/permission_dp_30"
@@ -84,6 +85,18 @@
         </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvEvent"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_below="@+id/appbar_layout"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/llPlacement" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/bttnPicDoc"

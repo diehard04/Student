@@ -7,6 +7,8 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NotificationCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.app.Notification;
@@ -73,6 +75,10 @@ public class FacultyEventsActivity extends AppCompatActivity {
     private List<Uri> uriList = new ArrayList<>();
     private AppCompatEditText etEventName, etEventTime, etEventVenue, etEventDescription;
     private TextInputLayout tilEventName, tilEventTime, tilEventVenue, tilEventDescription;
+    private ArrayList<UploadInfo> uploadInfoArrayList = new ArrayList<>();
+    private RecyclerView rvEvent;
+    private FacultyAcademicAdapter mAcademicAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +93,7 @@ public class FacultyEventsActivity extends AppCompatActivity {
         toolbar.setTitle("Events:  " + selectedDate);
         askPermission();
         initView();
+        getFirebaseData();
     }
 
     private void askPermission() {
@@ -118,6 +125,35 @@ public class FacultyEventsActivity extends AppCompatActivity {
                 })
                 .start();
 
+    }
+
+    private void getFirebaseData() {
+        ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setMessage("Loading..");
+        dialog.show();
+        mDataBaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                uploadInfoArrayList.clear();
+                for (DataSnapshot postSnapShot : snapshot.getChildren()) {
+                    UploadInfo uploadInfo = postSnapShot.getValue(UploadInfo.class);
+                    String uid = postSnapShot.getKey();
+                    Log.d("node id= ", uid);
+                    uploadInfo.setUid(uid);
+                    uploadInfoArrayList.add(uploadInfo);
+                }
+                Log.d("list size= ", uploadInfoArrayList.size() + "");
+                mAcademicAdapter.notifyDataSetChanged();
+                dialog.dismiss();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getApplicationContext(), "Database Error : " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+
+            }
+        });
     }
 
     private void initView() {
@@ -179,6 +215,18 @@ public class FacultyEventsActivity extends AppCompatActivity {
                 uploadEventInfo(name, time, venue, desc);
             }
         });
+
+        rvEvent = findViewById(R.id.rvEvent);
+        mAcademicAdapter = new FacultyAcademicAdapter(this, uploadInfoArrayList, new FacultyAcademicAdapter.FacultyAcademicInterface() {
+            @Override
+            public void onclick(String uid) {
+                Log.d("uid onclick = ", uid);
+                mDataBaseRef.child(uid).removeValue();
+            }
+        });
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        rvEvent.setLayoutManager(layoutManager);
+        rvEvent.setAdapter(mAcademicAdapter);
     }
 
     private void uploadEventInfo(String eventName, String eventTime, String venue, String eventDescription) {
@@ -190,7 +238,7 @@ public class FacultyEventsActivity extends AppCompatActivity {
         String uploadId = mDataBaseRef.push().getKey();
         mDataBaseRef.child(uploadId).setValue(model);
         Toast.makeText(FacultyEventsActivity.this, "data Uploaded", Toast.LENGTH_SHORT).show();
-
+        addNotification(eventName);
     }
 
     @Override

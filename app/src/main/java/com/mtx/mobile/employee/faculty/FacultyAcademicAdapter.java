@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mtx.mobile.employee.R;
 import com.mtx.mobile.employee.model.UploadInfo;
+import com.mtx.mobile.employee.utils.Constant;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -44,7 +45,11 @@ public class FacultyAcademicAdapter extends RecyclerView.Adapter<FacultyAcademic
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull MyViewHolder holder, int position) {
-        holder.tv_name.setText(infoList.get(position).getName());
+        if (Constant.MODULE_TYPE.equalsIgnoreCase("Academic")) {
+            holder.tv_name.setText(infoList.get(position).getName());
+        } else if (Constant.MODULE_TYPE.equalsIgnoreCase("Placement") || Constant.MODULE_TYPE.equalsIgnoreCase("Events")) {
+            holder.tv_name.setText(infoList.get(position).getEventName());
+        }
         holder.tv_date.setText(infoList.get(position).getDateTime());
         holder.iv_delete.setOnClickListener(new View.OnClickListener() {
             @Override

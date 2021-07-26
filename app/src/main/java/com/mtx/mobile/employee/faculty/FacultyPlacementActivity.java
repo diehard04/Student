@@ -7,6 +7,8 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NotificationCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.app.Notification;
@@ -32,8 +34,11 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -70,6 +75,9 @@ public class FacultyPlacementActivity extends AppCompatActivity {
     private List<Uri> uriList = new ArrayList<>();
     private AppCompatEditText etEventName, etEventTime, etEventDescription;
     private TextInputLayout tilEventName, tilEventTime, tilEventDescription;
+    private ArrayList<UploadInfo> uploadInfoArrayList = new ArrayList<>();
+    private RecyclerView rvEvent;
+    private FacultyAcademicAdapter mAcademicAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +92,38 @@ public class FacultyPlacementActivity extends AppCompatActivity {
         toolbar.setTitle("Placement Event:  " + selectedDate);
         askPermission();
         initView();
+        getFirebaseData();
     }
+
+    private void getFirebaseData() {
+        ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setMessage("Loading..");
+        dialog.show();
+        mDataBaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                uploadInfoArrayList.clear();
+                for (DataSnapshot postSnapShot : snapshot.getChildren()) {
+                    UploadInfo uploadInfo = postSnapShot.getValue(UploadInfo.class);
+                    String uid = postSnapShot.getKey();
+                    Log.d("node id= ", uid);
+                    uploadInfo.setUid(uid);
+                    uploadInfoArrayList.add(uploadInfo);
+                }
+                Log.d("list size= ", uploadInfoArrayList.size() +"");
+                mAcademicAdapter.notifyDataSetChanged();
+                dialog.dismiss();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getApplicationContext(), "Database Error : " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+
+            }
+        });
+    }
+
 
     private void askPermission() {
         AndPermission.with(this)
@@ -168,6 +207,18 @@ public class FacultyPlacementActivity extends AppCompatActivity {
 
             }
         });
+
+        rvEvent = findViewById(R.id.rvEvent);
+        mAcademicAdapter = new FacultyAcademicAdapter(this, uploadInfoArrayList, new FacultyAcademicAdapter.FacultyAcademicInterface() {
+            @Override
+            public void onclick(String uid) {
+                Log.d("uid onclick = ", uid);
+                mDataBaseRef.child(uid).removeValue();
+            }
+        });
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        rvEvent.setLayoutManager(layoutManager);
+        rvEvent.setAdapter(mAcademicAdapter);
     }
 
     @Override

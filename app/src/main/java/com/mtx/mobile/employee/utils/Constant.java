@@ -5,4 +5,11 @@ package com.mtx.mobile.employee.utils;
  */
 public class Constant {
     public static String MODULE_TYPE = "HOME";
+    public static final String MODULE= "";
+}
+
+enum MODULE {
+    ACADEMIC,
+    PLACEMENT,
+    EVENTS
 }

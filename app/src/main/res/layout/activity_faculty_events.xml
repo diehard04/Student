@@ -23,6 +23,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
+        android:id="@+id/llEvents"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/permission_dp_30"
@@ -102,15 +103,27 @@
 
     </LinearLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvEvent"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_below="@+id/appbar_layout"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/llEvents" />
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/bttnPicDoc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/permission_dp_30"
-        android:visibility="gone"
         android:background="@color/colorPrimary"
         android:text="Pick Document"
         android:textSize="16sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/bttnSubmit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
